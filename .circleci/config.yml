@@ -10,8 +10,8 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
-              echo "it is staging"
-              cd deployments/us-west-2/staging && ls
+              cd deployments/us-west-2/staging
+              terragrunt run-all plan
             fi
             if [ "${CIRCLE_BRANCH}" == "prod" ];
             then 
