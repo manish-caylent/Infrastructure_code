@@ -14,10 +14,34 @@ jobs:
           root: .
           paths:
             - .
+  apply:
+    docker: 
+      - image: alpine/terragrunt
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: terragrunt apply
+          command: |
+            cd deployments/us-west-2/staging
+            terragrunt run-all apply -auto-approve
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - .
+
 workflows:
   version: 2
   plan_release:
     jobs:
       - plan
-      
+      - hold_apply:
+          type: approval
+          requires:
+            - plan
+      - apply:
+          requires:
+            - hold_apply
+
+
    
