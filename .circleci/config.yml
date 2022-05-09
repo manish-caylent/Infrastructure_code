@@ -10,7 +10,6 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "trunk" ];
             then 
-              terragrunt run-all plan --terragrunt-non-interactive
               echo "it is working"
             fi
       - persist_to_workspace: 
