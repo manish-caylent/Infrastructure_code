@@ -8,9 +8,15 @@ jobs:
       - run:
           name: terragrunt plan
           command: |
-            if [ "${CIRCLE_BRANCH}" == "trunk" ];
+            if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
-              echo "it is working"
+              echo "it is staging"
+              cd deployments/us-west-2/staging && ls
+            fi
+            if [ "${CIRCLE_BRANCH}" == "prod" ];
+            then 
+              echo "it is prod"
+              cd deployments/us-west-2/prod && ls
             fi
       - persist_to_workspace: 
           root: .
