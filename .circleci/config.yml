@@ -24,7 +24,7 @@ jobs:
           name: terragrunt apply
           command: |
             cd deployments/us-west-2/staging
-            terragrunt run-all apply
+            terragrunt run-all apply -auto-approve
       - persist_to_workspace:
           root: .
           paths: 
