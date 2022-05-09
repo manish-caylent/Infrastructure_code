@@ -8,8 +8,10 @@ jobs:
       - run:
           name: terragrunt plan
           command: |
-            cd deployments/us-west-2/staging
-            terragrunt run-all plan
+            if [ "${CIRCLE_BRANCH}" == "trunk" ];
+            then 
+              terragrunt run-all plan --terragrunt-non-interactive
+              echo "it is working"
       - persist_to_workspace: 
           root: .
           paths:
@@ -24,7 +26,7 @@ jobs:
           name: terragrunt apply
           command: |
             cd deployments/us-west-2/staging
-            terragrunt run-all apply -auto-approve
+            terragrunt run-all apply -auto-approve --terragrunt-non-interactive
       - persist_to_workspace:
           root: .
           paths: 
