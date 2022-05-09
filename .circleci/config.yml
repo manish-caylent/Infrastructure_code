@@ -12,6 +12,7 @@ jobs:
             then 
               terragrunt run-all plan --terragrunt-non-interactive
               echo "it is working"
+            fi
       - persist_to_workspace: 
           root: .
           paths:
