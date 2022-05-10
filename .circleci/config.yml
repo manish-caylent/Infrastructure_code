@@ -16,13 +16,14 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "prod" ];
             then 
               echo "it is prod"
-              cd deployments/us-west-2/prod && ls
+              cd deployments/us-west-2/prod 
+              terragrunt run-all plan
             fi
       - persist_to_workspace: 
           root: .
           paths:
             - .
-            
+
   apply:
     docker: 
       - image: alpine/terragrunt
@@ -32,8 +33,17 @@ jobs:
       - run:
           name: terragrunt apply
           command: |
-            cd deployments/us-west-2/staging
-            terragrunt run-all apply -auto-approve --terragrunt-non-interactive
+            if [ "${CIRCLE_BRANCH}" == "staging" ];
+            then 
+              cd deployments/us-west-2/staging
+              terragrunt run-all apply -auto-approve --terragrunt-non-interactive
+            fi
+            if [ "${CIRCLE_BRANCH}" == "prod" ];
+            then 
+              echo "it is prod"
+              cd deployments/us-west-2/prod 
+              terragrunt run-all apply -auto-approve --terragrunt-non-interactive
+            fi
       - persist_to_workspace:
           root: .
           paths: 
