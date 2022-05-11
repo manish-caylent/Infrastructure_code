@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  gh: circleci/github-cli@1.0
 jobs: 
   plan:
     docker: 
@@ -54,6 +56,18 @@ workflows:
   plan_release:
     jobs:
       - plan
+      - gh/release:
+          notes-file: CHANGELOG.md
+          tag: 1.0.0
+          title: Initial Release
+          requires:
+            - plan
+          context:
+            - GITHUB_CREDS
+          filters:
+            branches:
+              only:
+                - main
       - hold_apply:
           type: approval
           requires:
