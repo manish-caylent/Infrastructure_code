@@ -57,9 +57,9 @@ workflows:
     jobs:
       - plan
       - gh/release:
-          notes-file: CHANGELOG.md
-          tag: 1.0.0
-          title: Initial Release
+          notes-file: changelog.md
+          tag: 1.0.1
+          title: Added source path for prod
           requires:
             - plan
           context:
