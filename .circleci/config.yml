@@ -13,12 +13,12 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               cd deployments/us-west-2/staging
-              terragrunt run-all plan -auto-approve --terragrunt-non-interactive
+              terragrunt run-all plan --terragrunt-non-interactive
             fi
             if [ "${CIRCLE_BRANCH}" == "prod" ];
             then 
               cd deployments/us-west-2/prod 
-              terragrunt run-all plan -auto-approve --terragrunt-non-interactive
+              terragrunt run-all plan --terragrunt-non-interactive
             fi
       - persist_to_workspace: 
           root: .
