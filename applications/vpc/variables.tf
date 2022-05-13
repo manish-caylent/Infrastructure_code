@@ -68,6 +68,9 @@ variable "cidr" {
 variable "vpc_name" {
     type = string
 }
+variable "tgw_name" {
+    type = string
+}
 variable "environment" {
     type = string
 }
