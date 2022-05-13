@@ -3,7 +3,7 @@ include "root" {
 }
 
 terraform {
-  source = "git::git@github.com:manish-caylent/terraform_modules.git//modules/aws-vpc?ref=v0.0.1"
+  source = "../../../../applications/vpc"
 }
 
 inputs = {
@@ -13,7 +13,7 @@ inputs = {
   private_subnets  = ["10.68.8.0/24", "10.68.9.0/24"]
   public_subnets   = ["10.68.0.0/24", "10.68.1.0/24"]
   database_subnets = ["10.68.16.0/24", "10.68.17.0/24"]
- 
+  tgw_name         = "staging-tgw"
   #tags
   cost_center = "USA"
   owner       = "iiq"

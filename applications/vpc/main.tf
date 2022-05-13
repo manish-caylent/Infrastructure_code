@@ -41,3 +41,25 @@ module "vpc" {
 
   tags = local.tags
 }
+
+module "tgw" {
+  source  = "terraform-aws-modules/transit-gateway/aws"
+
+  name        = var.tgw_name
+  enable_auto_accept_shared_attachments = true
+
+  vpc_attachments = {
+    vpc = {
+      vpc_id       = module.vpc.vpc_id
+      subnet_ids   = module.vpc.private_subnets
+      dns_support  = true
+      ipv6_support = true
+      tgw_routes = [
+        {
+          destination_cidr_block = "30.0.0.0/16"
+        }
+      ]
+    }
+  }
+  tags = local.tags
+}
