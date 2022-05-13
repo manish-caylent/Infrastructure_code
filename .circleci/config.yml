@@ -12,11 +12,9 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
-              AWS_PROFILE=${STAGING_AWS_PROFILE}
               AWS_REGION=${STAGING_AWS_REGION}
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
-              aws configure --profile ${AWS_PROFILE}
               cd deployments/us-west-2/staging
               terragrunt run-all plan --terragrunt-non-interactive
             fi
