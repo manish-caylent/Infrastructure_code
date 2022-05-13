@@ -4,7 +4,7 @@ orbs:
 jobs: 
   plan:
     docker: 
-      - image: devopsinfra/docker-terragrunt
+      - image: alpine/terragrunt
     steps:
       - checkout
       - run:
@@ -25,9 +25,7 @@ jobs:
       - persist_to_workspace: 
           root: .
           paths:
-            - .
-
-            
+            - .       
   apply:
     docker: 
       - image: alpine/terragrunt
