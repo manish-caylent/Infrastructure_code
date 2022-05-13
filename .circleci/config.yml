@@ -4,7 +4,7 @@ orbs:
 jobs: 
   plan:
     docker: 
-      - image: alpine/terragrunt
+      - image: devopsinfra/docker-terragrunt
     steps:
       - checkout
       - run:
