@@ -10,7 +10,7 @@ jobs:
       - run:
           name: terragrunt plan
           command: |
-            echo "curl -s -H "Authorization: token ${GITHUB_TOKEN}" $pr | jq '.base.ref'"
+            curl -s -H "Authorization: token ${GITHUB_TOKEN}" $pr | jq '.base.ref'
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
