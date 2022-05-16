@@ -7,6 +7,7 @@ jobs:
       - image: alpine/terragrunt
     steps:
       - checkout
+      - gh/setup
       - run:
           name: terragrunt plan
           command: |
