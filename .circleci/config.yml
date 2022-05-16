@@ -13,7 +13,6 @@ jobs:
           name: curl install
           command: | 
             apk add curl curl-dev
-      - jq/install
       - run:
           name: terragrunt plan
           command: |  
@@ -72,6 +71,7 @@ workflows:
   version: 2
   plan_release:
     jobs:
+      - jq/install
       - plan
       - gh/release:
           notes-file: changelog.md
