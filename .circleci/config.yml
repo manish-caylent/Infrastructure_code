@@ -17,12 +17,8 @@ jobs:
       - run:
           name: terragrunt plan
           command: |  
-            curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
-            -o jq
-            chmod +x jq
-            url="https://api.github.com/repos/$ORG/$PROJECT/pulls/$CIRCLE_PR_NUMBER?access_token=$GITHUB_TOKEN"
-            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
-            echo "${target_branch}"
+            pr = $(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
+            base = $(curl -s -H "Authorization: token ${GITHUB_TOKEN}" $pr | jq '.base.ref')
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
