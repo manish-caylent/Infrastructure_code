@@ -18,7 +18,8 @@ jobs:
       - run:
           name: terragrunt plan
           command: |  
-            
+            PR_NUMBER=$(echo "$CIRCLE_PULL_REQUEST" | sed "s/.*\/pull\///")
+            echo "PR_NUMBER: $PR_NUMBER"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
