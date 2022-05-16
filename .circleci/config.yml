@@ -9,7 +9,8 @@ jobs:
       - checkout
       - run:
           name: terragrunt plan
-          command: |
+          command: |  
+            sudo apt install curl
             curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
             -o jq
             chmod +x jq
