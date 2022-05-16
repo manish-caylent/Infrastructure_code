@@ -77,6 +77,10 @@ workflows:
           type: approval
           requires:
             - plan
+          filters:
+            branches:
+              only:
+                - main
       - apply:
           requires:
             - hold_apply
