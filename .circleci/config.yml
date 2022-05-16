@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  gh: circleci/github-cli@2.0
+  gh: circleci/github-cli@2.1.0
 jobs: 
   plan:
     docker: 
@@ -11,7 +11,7 @@ jobs:
       - run:
           name: terragrunt plan
           command: |
-            TARGET_BRANCH=$(gh pr view $CIRCLE_PULL_REQUEST --json baseRefName --jq '.baseRefName')
+            TARGET_BRANCH='$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" $(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//") | jq ".base.ref" | tr -d "\042" )'
             echo "$TARGET_BRANCH"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
