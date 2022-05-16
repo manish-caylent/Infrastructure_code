@@ -10,6 +10,8 @@ jobs:
       - run:
           name: terragrunt plan
           command: |
+            TARGET_BRANCH=$(gh pr view $CIRCLE_PULL_REQUEST --json baseRefName --jq '.baseRefName')
+            echo "$TARGET_BRANCH"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
