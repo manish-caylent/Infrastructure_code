@@ -10,9 +10,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: curl install
+          name: curl,jq install
           command: | 
             apk add curl curl-dev
+            apk add --upgrade jq
       - run:
           name: terragrunt plan
           command: |  
@@ -71,7 +72,6 @@ workflows:
   version: 2
   plan_release:
     jobs:
-      - jq/install
       - plan
       - gh/release:
           notes-file: changelog.md
