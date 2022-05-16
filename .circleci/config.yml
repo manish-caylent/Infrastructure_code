@@ -14,11 +14,11 @@ jobs:
           command: | 
             apk add curl curl-dev
       - jq/install
+      - ghpr/get-pr-info
       - run:
           name: terragrunt plan
           command: |  
-            PR = echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//"
-            base = $(curl -s -H "Authorization: token ${GITHUB_TOKEN}" "${PR}" | jq '.base.ref')
+            
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
