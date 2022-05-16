@@ -10,8 +10,7 @@ jobs:
       - run:
           name: terragrunt plan
           command: |
-            TARGET_BRANCH='$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" $(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//") | jq ".base.ref" | tr -d "\042" )'
-            echo "$TARGET_BRANCH"
+            echo "curl -s -H "Authorization: token ${GITHUB_TOKEN}" $pr | jq '.base.ref'"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
