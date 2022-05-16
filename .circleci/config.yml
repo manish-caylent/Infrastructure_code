@@ -12,7 +12,7 @@ jobs:
       - run:
           name: terragrunt plan
           command: |  
-          echo $"GITHUB_PR_BASE_BRANCH"
+            echo "${GITHUB_PR_BASE_BRANCH}"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
