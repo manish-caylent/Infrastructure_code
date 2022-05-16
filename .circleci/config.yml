@@ -2,12 +2,14 @@ version: 2.1
 orbs:
   gh: circleci/github-cli@2.1.0
   ghpr: narrativescience/ghpr@1.1.6
+  jq: circleci/jq@2.2.0
 jobs: 
   plan:
     docker: 
       - image: alpine/terragrunt
     steps:
       - checkout
+      - jq/install
       - ghpr/get-pr-info
       - run:
           name: terragrunt plan
