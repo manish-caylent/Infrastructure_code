@@ -20,10 +20,13 @@ jobs:
             PR_NUMBER=$(echo "$CIRCLE_PULL_REQUEST" | sed "s/.*\/pull\///")
             API_GITHUB="https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
             PR_REQUEST_URL="$API_GITHUB/pulls/$PR_NUMBER"
-            PR_RESPONSE=$(curl -H "Authorization: token $GITHUB_TOKEN" "$PR_REQUEST_URL")
-            PR_BASE_BRANCH=$(echo $PR_RESPONSE | jq -e '.base.ref' | tr -d '"')
-            echo "PR_BASE_BRANCH: $PR_BASE_BRANCH" 
             echo "PR_NUMBER: $PR_NUMBER"
+            curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
+            -o jq
+            chmod +x jq
+            url="https://api.github.com/repos/org/repo/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
+            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
+            echo "${target_branch}"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
