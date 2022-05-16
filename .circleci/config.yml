@@ -19,6 +19,8 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "prod" ];
             then 
+              AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
               cd deployments/us-west-2/prod 
               terragrunt run-all plan --terragrunt-non-interactive
             fi
@@ -37,12 +39,15 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
+              AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
               cd deployments/us-west-2/staging
               terragrunt run-all apply -auto-approve --terragrunt-non-interactive
             fi
             if [ "${CIRCLE_BRANCH}" == "prod" ];
             then 
-              echo "it is prod"
+              AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
               cd deployments/us-west-2/prod 
               terragrunt run-all apply -auto-approve --terragrunt-non-interactive
             fi
