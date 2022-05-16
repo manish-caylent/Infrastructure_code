@@ -1,21 +1,18 @@
 version: 2.1
 orbs:
   gh: circleci/github-cli@2.1.0
+  ghpr: narrativescience/ghpr@1.1.6
 jobs: 
   plan:
     docker: 
       - image: alpine/terragrunt
     steps:
       - checkout
+      - ghpr/get-pr-info
       - run:
           name: terragrunt plan
           command: |  
-            apt install curl
-            curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
-            -o jq
-            chmod +x jq
-            url="https://api.github.com/repos/$ORG/$PROJECT/pulls/$CIRCLE_PR_NUMBER?access_token=$GITHUB_TOKEN"
-            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
+          echo $"GITHUB_PR_BASE_BRANCH"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
