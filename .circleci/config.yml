@@ -9,6 +9,10 @@ jobs:
       - image: alpine/terragrunt
     steps:
       - checkout
+      - run:
+          name: curl install
+          command: | 
+            apk add curl curl-dev
       - jq/install
       - ghpr/get-pr-info
       - run:
