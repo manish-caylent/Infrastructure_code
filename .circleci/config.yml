@@ -14,7 +14,6 @@ jobs:
           command: | 
             apk add curl curl-dev
       - jq/install
-      - ghpr/get-pr-info
       - run:
           name: terragrunt plan
           command: |  
