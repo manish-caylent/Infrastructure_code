@@ -44,7 +44,8 @@ jobs:
       - persist_to_workspace: 
           root: .
           paths:
-            - .       
+            - .    
+               
   apply:
     docker: 
       - image: alpine/terragrunt
