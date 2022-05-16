@@ -24,9 +24,10 @@ jobs:
             curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
             -o jq
             chmod +x jq
-            url="https://api.github.com/repos/org/repo/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
-            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
-            echo "${target_branch}"
+            PR_RESPONSE="https://api.github.com/repos/org/repo/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
+            //target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
+            PR_BASE_BRANCH=$(curl  "$PR_RESPONSE" | jq -e '.base.ref' | tr -d '"')
+            //echo "${target_branch}"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
