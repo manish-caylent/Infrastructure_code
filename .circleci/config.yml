@@ -1,6 +1,8 @@
 version: 2.1
 orbs:
-  gh: circleci/github-cli@2.0
+  gh: circleci/github-cli@2.1.0
+  ghpr: narrativescience/ghpr@1.1.6
+  jq: circleci/jq@2.2.0
 jobs: 
   plan:
     docker: 
@@ -8,8 +10,23 @@ jobs:
     steps:
       - checkout
       - run:
+          name: curl,jq install
+          command: | 
+            apk add curl curl-dev
+            apk add --upgrade jq
+      - run:
           name: terragrunt plan
-          command: |
+          command: |  
+            PR_NUMBER=$(echo "$CIRCLE_PULL_REQUEST" | sed "s/.*\/pull\///")
+            API_GITHUB="https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
+            PR_REQUEST_URL="$API_GITHUB/pulls/$PR_NUMBER"
+            echo "PR_NUMBER: $PR_NUMBER"
+            curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
+            -o jq
+            chmod +x jq
+            url="https://api.github.com/repos/$CIRCLE_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
+            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
+            echo "${target_branch}"
             if [ "${CIRCLE_BRANCH}" == "staging" ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
@@ -27,7 +44,7 @@ jobs:
       - persist_to_workspace: 
           root: .
           paths:
-            - .       
+            - .          
   apply:
     docker: 
       - image: alpine/terragrunt
