@@ -26,7 +26,7 @@ jobs:
             url="https://api.github.com/repos/$CIRCLE_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
             target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
             echo ${target_branch}
-            if [ "${CIRCLE_BRANCH}" == "staging" || "${target_branch}" == "staging" ];
+            if [ (${CIRCLE_BRANCH} == "staging") || (${target_branch} == "staging") ];
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
