@@ -1,8 +1,4 @@
 version: 2.1
-parameters:
-  source_branch:
-    type: boolean
-    default: ${CIRCLE_BRANCH}
 orbs:
   gh: circleci/github-cli@2.1.0
   jq: circleci/jq@2.2.0
@@ -87,8 +83,8 @@ workflows:
   conditional-workflow:
     when:
         or:
-          - equal: [ prod, << pipeline.parameters.source_branch >> ]
-          - equal: [ staging, << pipeline.parameters.source_branch >> ]
+          - equal: [ prod, << pipeline.git.branch >> ]
+          - equal: [ staging, << pipeline.git.branch >> ]
     jobs:
       - hold_apply:
           type: approval
