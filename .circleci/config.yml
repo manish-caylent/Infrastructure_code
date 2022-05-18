@@ -23,16 +23,16 @@ jobs:
             -o jq
             chmod +x jq
             url="https://api.github.com/repos/$CIRCLE_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
-            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
-            echo ${target_branch}
-            if [ "${target_branch}" == "staging" or "${CIRCLE_BRANCH}" == "staging" ];
+            TARGET_BRANCH=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
+            echo ${TARGET_BRANCH}
+            if [[ $TARGET_BRANCH == "staging" || $CIRCLE_BRANCH == "staging" ]]
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
               cd deployments/us-west-2/staging
               terragrunt run-all plan --terragrunt-non-interactive
             fi
-            if [ "${target_branch}" == "prod" or "${CIRCLE_BRANCH}" == "prod"];
+            if [[ $TARGET_BRANCH == "prod" || $CIRCLE_BRANCH == "prod" ]]
             then 
               AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
