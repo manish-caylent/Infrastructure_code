@@ -32,7 +32,7 @@ jobs:
               cd deployments/us-west-2/staging
               terragrunt run-all plan --terragrunt-non-interactive
             fi
-            if [ "${CIRCLE_BRANCH}" == "prod" ];
+            if [ '${CIRCLE_BRANCH} == "prod" || ${target_branch} == "prod"' ];
             then 
               AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
