@@ -85,6 +85,7 @@ workflows:
           - equal: [ prod, << pipeline.git.branch >> ]
           - equal: [ staging, << pipeline.git.branch >> ]
     jobs:
+      - plan
       - hold_apply:
           type: approval
           requires:
