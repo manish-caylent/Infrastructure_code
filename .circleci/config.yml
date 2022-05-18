@@ -80,15 +80,14 @@ workflows:
   plan_release:
     jobs:
       - plan
+  conditional-workflow:
+    when:
+        - equal: [ staging, $CIRCLE_BRANCH ]
+    jobs:
       - hold_apply:
           type: approval
           requires:
             - plan
-          filters:
-            branches:
-              only:
-                - staging
-                - prod
       - apply:
           requires:
             - hold_apply
