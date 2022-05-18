@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
   gh: circleci/github-cli@2.1.0
-  ghpr: narrativescience/ghpr@1.1.6
   jq: circleci/jq@2.2.0
+
 jobs: 
   plan:
     docker: 
@@ -24,17 +24,16 @@ jobs:
             -o jq
             chmod +x jq
             url="https://api.github.com/repos/$CIRCLE_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
-            echo ${url}
-            target_branch=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
-            echo ${target_branch}
-            if [ '${CIRCLE_BRANCH} == "staging" || ${target_branch} == "staging"' ];
+            TARGET_BRANCH=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
+            echo ${TARGET_BRANCH}
+            if [[ $TARGET_BRANCH == "staging" || $CIRCLE_BRANCH == "staging" ]]
             then 
               AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
               cd deployments/us-west-2/staging
               terragrunt run-all plan --terragrunt-non-interactive
             fi
-            if [ "${CIRCLE_BRANCH}" == "prod" ];
+            if [[ $TARGET_BRANCH == "prod" || $CIRCLE_BRANCH == "prod" ]]
             then 
               AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
@@ -80,26 +79,19 @@ workflows:
   plan_release:
     jobs:
       - plan
-      - gh/release:
-          notes-file: changelog.md
-          tag: v1.0.0
-          title: Updated tag
-          requires:
-            - plan
-          context:
-            - GITHUB_CREDS
-          filters:
-            branches:
-              only:
-                - main
+  conditional-workflow:
+    when:
+      or: # All must be true to trigger
+        - equal: [ dev, $CIRCLE_BRANCH ]
+        - equal: [ staging, $CIRCLE_BRANCH ]
+        - equal: [ production, $CIRCLE_BRANCH ]
+        - equal: [ qa, $CIRCLE_BRANCH ]
+        - equal: [ common-services, $CIRCLE_BRANCH ]
+    jobs:
       - hold_apply:
           type: approval
           requires:
             - plan
-          filters:
-            branches:
-              only:
-                - main
       - apply:
           requires:
             - hold_apply
