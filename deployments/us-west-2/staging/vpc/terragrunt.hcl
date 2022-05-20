@@ -15,7 +15,7 @@ inputs = {
   database_subnets = ["10.68.16.0/24", "10.68.17.0/24"]
   tgw_name         = "staging-tgw"
   #tags
-  cost_center = "usa"
+  cost_center = "us"
   owner       = "iiq"
   application = "vpc"
   environment = "staging"
