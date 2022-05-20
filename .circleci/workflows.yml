@@ -47,7 +47,7 @@ workflows:
     when: << pipeline.parameters.staging-vpc >>     
     jobs:
       - plan-stage-vpc:
-      - deploy-stage-vpc:
+      - deploy-staging-vpc:
           requires:
             - plan-stage-vpc:
           filters:

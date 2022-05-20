@@ -18,5 +18,5 @@ inputs = {
   cost_center = "usa"
   owner       = "iiq"
   application = "vpc"
-  environment = "staging"
+  environment = "stage"
 }
