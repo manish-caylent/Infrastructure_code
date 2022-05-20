@@ -16,7 +16,7 @@ inputs = {
   tgw_name         = "staging-tgw"
   #tags
   cost_center = "usa"
-  owner       = "iiq"
+  owner       = "manish"
   application = "vpc"
   environment = "staging"
 }
