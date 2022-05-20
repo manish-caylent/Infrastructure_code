@@ -1,0 +1,56 @@
+version: 2.1
+parameters:
+  prod-frontend:
+    type: boolean
+    default: false
+  prod-vpc:
+    type: boolean
+    default: false
+  staging-frontend:
+    type: boolean
+    default: false
+  staging-vpc:
+    type: boolean
+    default: false
+jobs:
+  plan-stage-vpc:
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - run:
+          name: stgaing plan vpc
+          command: |
+            cd deployments/us-west-2/staging/vpc 
+            terragrunt run-all plan --terragrunt-non-interactive
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  deploy-staging-vpc:
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - run:
+          name: staging apply vpc
+          command: |
+            cd deployments/us-west-2/staging/vpc 
+            terragrunt run-all apply --terragrunt-non-interactive
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+workflows:
+  plan:
+    when:
+      or:
+        - << pipeline.parameters.staging-vpc >>
+    jobs:
+      - plan-stage-vpc:
+      - deploy-stage-vpc:
+          requires:
+            - plan-stage-vpc:
+          filters:
+            branches:
+              only: development
