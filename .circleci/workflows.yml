@@ -19,7 +19,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: stgaing plan vpc
+          name: planning the vpc for stage env
           command: |
             cd deployments/us-west-2/staging/vpc 
             terragrunt run-all plan --terragrunt-non-interactive
@@ -27,29 +27,62 @@ jobs:
           root: .
           paths:
             - .
-  deploy-staging-vpc:
+  apply-stage-vpc:
     docker:
       - image: alpine/terragrunt
     steps:
       - attach_workspace:
           at: .
       - run:
-          name: staging apply vpc
+          name: applying the vpc for stage env
           command: |
             cd deployments/us-west-2/staging/vpc 
             terragrunt run-all apply --terragrunt-non-interactive
+  plan-prod-vpc:
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - checkout
+      - run:
+          name: planning the vpc for prod env
+          command: |
+            cd deployments/us-west-2/prod/vpc 
+            terragrunt run-all plan --terragrunt-non-interactive
       - persist_to_workspace:
           root: .
           paths:
             - .
+  apply-prod-vpc:
+    docker:
+      - image: alpine/terragrunt
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: applying the vpc for prod env
+          command: |
+            cd deployments/us-west-2/prod/vpc 
+            terragrunt run-all apply --terragrunt-non-interactive
+            
 workflows:
-  plan:
-    when: << pipeline.parameters.staging-vpc >>     
+  stage_vpc:
+    when: << pipeline.parameters.staging-vpc >> 
     jobs:
-      - plan-stage-vpc:
-      - deploy-staging-vpc:
+      - plan-stage-vpc
+      - apply-stage-vpc:
           requires:
-            - plan-stage-vpc:
+            - plan-stage-vpc
           filters:
             branches:
               only: development
+  prod_vpc:
+    when: << pipeline.parameters.prod-vpc >>
+    jobs:
+      - plan-prod-vpc
+      - apply-prod-vpc:
+          requires:
+            - plan-prod-vpc
+          filters:
+            branches:
+              only: development
+  
