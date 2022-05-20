@@ -8,8 +8,8 @@ workflows:
       - path-filtering/filter:
           base-revision: development
           mapping: |
-            deployments/us-west-2/prod/frontend/* prod-frontend true
-            deployments/us-west-2/prod/vpc/* prod-vpc true
-            deployments/us-west-2/staging/frontend/* staging-frontend true
-            deployments/us-west-2/staging/vpc/* staging-vpc true
+            deployments/us-west-2/prod/frontend/.* prod-frontend true
+            deployments/us-west-2/prod/vpc/.* prod-vpc true
+            deployments/us-west-2/staging/frontend/.* staging-frontend true
+            deployments/us-west-2/staging/vpc/.* staging-vpc true
           config-path: .circleci/workflows.yml

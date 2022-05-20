@@ -15,8 +15,8 @@ inputs = {
   database_subnets = ["10.78.16.0/24", "10.78.17.0/24"]
   tgw_name = "prod-tgw"
   #tags
-  cost_center = "USA"
-  owner       = "iiq"
-  application = "vpc"
-  environment = "prod"
+  cost_center  = "USA"
+  owner        = "iiq"
+  application  = "vpc"
+  environment  = "production"
 }
