@@ -31,7 +31,8 @@ jobs:
     docker:
       - image: alpine/terragrunt
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: staging apply vpc
           command: |
@@ -43,9 +44,7 @@ jobs:
             - .
 workflows:
   plan:
-    when:
-      or:
-        - << pipeline.parameters.staging-vpc >>
+    when: << pipeline.parameters.staging-vpc >>     
     jobs:
       - plan-stage-vpc:
       - deploy-stage-vpc:
