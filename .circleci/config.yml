@@ -8,4 +8,7 @@ jobs:
     machine: true
     resource_class: terraform_test/sorrycypress
     steps:
-      - run: echo "Hi I'm on Runners!"
+      - run: |
+         mkdir test
+         cd test && mkdir test1
+         
