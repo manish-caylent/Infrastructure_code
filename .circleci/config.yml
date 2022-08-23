@@ -9,6 +9,7 @@ jobs:
     resource_class: terraform_test/sorrycypress
     steps:
       - run: |
+         ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
          git clone git@github.com:manish-caylent/terraform_modules.git
          
          
