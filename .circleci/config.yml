@@ -9,6 +9,7 @@ jobs:
     resource_class: terraform_test/sorrycypress
     steps:
       - run: |
+         sudo -i
          mkdir test
          cd test && mkdir test2-working
          
