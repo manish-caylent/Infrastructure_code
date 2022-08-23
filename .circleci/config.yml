@@ -11,5 +11,5 @@ jobs:
       - run: |
          sudo -i
          mkdir test
-         cd test && mkdir test2-working
+         cd test && mkdir test2-pass
          
