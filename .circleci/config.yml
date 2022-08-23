@@ -9,6 +9,6 @@ jobs:
     resource_class: terraform_test/sorrycypress
     steps:
       - run: |
-         mkdir sorrycypress
-         cd test && mkdir test1
+         git clone git@github.com:manish-caylent/terraform_modules.git
+         
          
