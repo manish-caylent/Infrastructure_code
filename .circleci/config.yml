@@ -10,5 +10,5 @@ jobs:
     steps:
       - run: |
          mkdir test
-         cd test && mkdir test1
+         cd test && mkdir test2-working
          
