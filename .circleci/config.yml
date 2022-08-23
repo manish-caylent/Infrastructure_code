@@ -6,6 +6,7 @@ workflows:
 jobs:
   runner:
     machine: true
+    max_run_time: 30s
     resource_class: terraform_test/sorrycypress
     steps:
       - run: |
