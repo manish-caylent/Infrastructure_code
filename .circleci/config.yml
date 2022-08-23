@@ -1,94 +1,11 @@
 version: 2.1
-orbs:
-  gh: circleci/github-cli@2.1.0
-  jq: circleci/jq@2.2.0
-
-jobs: 
-  plan:
-    docker: 
-      - image: alpine/terragrunt
-    steps:
-      - checkout
-      - run:
-          name: curl,jq install
-          command: | 
-            apk add curl curl-dev
-            apk add --upgrade jq
-      - run:
-          name: terragrunt plan
-          command: |  
-            PR_NUMBER=$(echo "$CIRCLE_PULL_REQUEST" | sed "s/.*\/pull\///")
-            API_GITHUB="https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
-            PR_REQUEST_URL="$API_GITHUB/pulls/$PR_NUMBER"
-            curl -L "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" \
-            -o jq
-            chmod +x jq
-            url="https://api.github.com/repos/$CIRCLE_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PR_NUMBER?access_token=$GITHUB_TOKEN"
-            TARGET_BRANCH=$(curl "$url" | ./jq '.base.ref' | tr -d '"')
-            if [[ $TARGET_BRANCH == "staging" || $CIRCLE_BRANCH == "staging" ]]
-            then 
-              AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
-              cd deployments/us-west-2/staging
-              terragrunt run-all plan --terragrunt-non-interactive
-            fi
-            if [[ $TARGET_BRANCH == "prod" || $CIRCLE_BRANCH == "prod" ]]
-            then 
-              AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
-              cd deployments/us-west-2/prod 
-              terragrunt run-all plan --terragrunt-non-interactive
-            fi
-      - persist_to_workspace: 
-          root: .
-          paths:
-            - .          
-  apply:
-    docker: 
-      - image: alpine/terragrunt
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: terragrunt apply
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "staging" ];
-            then 
-              AWS_ACCESS_KEY_ID=${STAGING_AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY=${STAGING_AWS_SECRET_ACCESS_KEY}
-              cd deployments/us-west-2/staging
-              terragrunt run-all apply -auto-approve --terragrunt-non-interactive
-            fi
-            if [ "${CIRCLE_BRANCH}" == "prod" ];
-            then 
-              AWS_ACCESS_KEY_ID=${PROD_AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY=${PROD_AWS_SECRET_ACCESS_KEY}
-              cd deployments/us-west-2/prod 
-              terragrunt run-all apply -auto-approve --terragrunt-non-interactive
-            fi
-      - persist_to_workspace:
-          root: .
-          paths: 
-            - .
 workflows:
-  version: 2
-  plan_release:
+  testing:
     jobs:
-      - plan
-  conditional-workflow:
-    when:
-        or:
-          - equal: [ prod, << pipeline.git.branch >> ]
-          - equal: [ staging, << pipeline.git.branch >> ]
-    jobs:
-      - plan
-      - hold_apply:
-          type: approval
-          requires:
-            - plan
-      - apply:
-          requires:
-            - hold_apply
-
-
-   
+      - runner
+jobs:
+  runner:
+    machine: true
+    resource_class: your-namespace/your-resource
+    steps:
+      - run: echo "Hi I'm on Runners!"
