@@ -11,6 +11,6 @@ jobs:
       - run: |
          mkdir test_dir
          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-         git clone git@github.com:manish-caylent/terraform_modules.git
+         git clone git@github.com:PropertyBrands/rez-qas-lrcypress.git
          
          
