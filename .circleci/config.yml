@@ -9,14 +9,10 @@ jobs:
     resource_class: terraform_test/sorrycypress
     parallelism: 2
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "57:3b:8f:52:bf:4c:9a:c3:a5:b3:33:c8:6d:57:1f:4a"
       - run: 
           name: Sorry-Cypress Tests
           command: |
-              ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-              git clone https://github.com/PropertyBrands/rez-qas-lrcypress.git
+              git clone https://$CIRCLECI_TOKEN@github.com/PropertyBrands/rez-qas-lrcypress.git 
               cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
               
          
