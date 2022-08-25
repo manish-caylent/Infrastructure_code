@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  cypress: cypress-io/cypress@2
 workflows:
   testing:
     jobs:
@@ -7,18 +9,26 @@ jobs:
   runner:
     machine: true
     resource_class: terraform_test/sorrycypress
-    parallelism: 3
     steps:
       - run: 
-          name: Sorry-Cypress Tests
+          name: Sorry-Cypress checkout
           command: |
               git clone https://$CIRCLECI_TOKEN@github.com/PropertyBrands/rez-qas-lrcypress.git 
               cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
-              npm install --force
-              sudo npm install -g cy2
-              export CYPRESS_API_URL="https://sorrycypress.internalaws.liverez.com:1234"
-              FILES=$(circleci tests glob "cypress/integration/api/**/pn.data.*_spec.js" | circleci tests split --split-by=filesize)
-              npx cy2 run --parallel --record --key lrkey01 --ci-build-id $CIRCLE_BUILD_NUM --project ./ --env configFile=stage_local --spec $FILES
+      - cypress/install:
+          # run a custom app build step
+          build: 'npm run build'
+      - cypress/run:
+          # make sure app has been installed and built
+          # before running tests across multiple machines
+          # this avoids installing same dependencies 10 times
+          requires:
+            - cypress/install
+          record: true # record results on Cypress Dashboard
+          parallel: true # split all specs across machines
+          parallelism: 3 # use 4 CircleCI machines to finish quickly
+          group: 'all tests' # name this group "all tests" on the dashboard
+          start: 'npm start' # start server before running tests
               
          
          
