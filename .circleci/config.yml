@@ -14,6 +14,8 @@ jobs:
           command: |
               git clone https://$CIRCLECI_TOKEN@github.com/PropertyBrands/rez-qas-lrcypress.git 
               cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
+              npm install --force
+              sudo npm install -g cy2
               
          
          
