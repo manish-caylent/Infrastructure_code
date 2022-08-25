@@ -16,7 +16,7 @@ jobs:
           name: Sorry-Cypress Tests
           command: |
               ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
-              git clone git@github.com:PropertyBrands/rez-qas-lrcypress.git
+              git clone https://github.com/PropertyBrands/rez-qas-lrcypress.git
               cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
               
          
