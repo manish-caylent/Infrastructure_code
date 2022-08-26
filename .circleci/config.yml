@@ -7,7 +7,7 @@ jobs:
   runner:
     machine: true
     resource_class: terraform_test/sorrycypress
-    parallelism: 5
+    parallelism: 3
     steps:
       - run: 
           name: Sorry-Cypress checkout
