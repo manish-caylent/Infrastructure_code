@@ -14,12 +14,12 @@ jobs:
               export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
               export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
               export AWS_DEFAULT_REGION=us-west-2
+              aws s3 ls
               git clone https://$CIRCLECI_TOKEN@github.com/PropertyBrands/rez-qas-lrcypress.git 
               cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
               npm install --force
               sudo npm install -g cy2
               export CYPRESS_API_URL="https://sorrycypress.internalaws.liverez.com:1234"
-              FILES=$(circleci tests glob "cypress/integration/api/**/pn.data.*_spec.js" | circleci tests split --split-by=filesize)
-              npx cy2 run --parallel --record --key lrkey01 --ci-build-id $CIRCLE_BUILD_NUM --project ./ --env configFile=stage_local --spec $FILES
+              npx cy2 run --parallel --record --key lrkey01 --ci-build-id $CIRCLE_BUILD_NUM --project ./ --env configFile=stage_local --spec cypress/integration/api/**/pn.data.*_spec.js
          
          
