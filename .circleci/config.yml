@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  cypress: cypress-io/cypress@2
 workflows:
   testing:
     jobs:
@@ -13,6 +11,9 @@ jobs:
       - run: 
           name: Sorry-Cypress checkout
           command: |
+              export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+              export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+              export AWS_DEFAULT_REGION=us-west-2
               git clone https://$CIRCLECI_TOKEN@github.com/PropertyBrands/rez-qas-lrcypress.git 
               cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
               npm install --force
