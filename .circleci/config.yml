@@ -20,6 +20,6 @@ jobs:
               npm install --force
               sudo npm install -g cy2
               export CYPRESS_API_URL="https://sorrycypress.internalaws.liverez.com:1234"
-              npx cy2 run --parallel --record --key lrkey01 --ci-build-id $CIRCLE_BUILD_NUM --project ./ --env configFile=stage_local --spec cypress/integration/api/**/pn.data.*_spec.js
+              npx cy2 run --parallel --record --key lrkey01 --ci-build-id $CIRCLE_BUILD_NUM --project ./ --env configFile=stage_local --spec "cypress/integration/api/**/pn.data.*_spec.js"
          
          
