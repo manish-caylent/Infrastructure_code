@@ -3,8 +3,8 @@ workflows:
   testing:
     jobs:
       - Deploy_Stage
-      
-Deploy_Stage:
+jobs:     
+  Deploy_Stage:
     docker: 
       - image: amazon/aws-cli
     steps:
