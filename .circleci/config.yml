@@ -2,26 +2,14 @@ version: 2.1
 workflows:
   testing:
     jobs:
-      - runner
-jobs:
-  runner:
-    machine: true
-    resource_class: terraform_test/sorrycypress
-    parallelism: 1
+      - Deploy_Stage
+      
+Deploy_Stage:
+    docker: 
+      - image: amazon/aws-cli
     steps:
       - run: 
-          name: Sorry-Cypress checkout
-          command: |
-              export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-              export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-              export AWS_DEFAULT_REGION=us-west-2
-              aws s3 ls
-              git clone https://$CIRCLECI_TOKEN@github.com/PropertyBrands/rez-qas-lrcypress.git 
-              cd rez-qas-lrcypress && git checkout -b API_VI remotes/origin/API_V1
-              npm install --force
-              sudo npm install -g cy2
-              export CYPRESS_API_URL="https://sorrycypress.internalaws.liverez.com:1234"
-              FILES=$(circleci tests glob "cypress/integration/api/pn.data.reservations.CreateNewPaymentReservation_spec.js" | circleci tests split --split-by=filesize)
-              npx cy2 run --parallel --record --key lrkey01 --ci-build-id $CIRCLE_BUILD_NUM --project ./ --env configFile=stage_local --spec $FILES
-         
-         
+         name: "Push to CodeDeploy"
+         command: |
+           export $CIRCLE_BUILD_NUM=$(($CIRCLE_BUILD_NUM+1))
+           echo $CIRCLE_BUILD_NUM
