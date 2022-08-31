@@ -11,5 +11,5 @@ jobs:
       - run: 
          name: "Push to CodeDeploy"
          command: |
-           $CIRCLE_BUILD_NUM=$(($CIRCLE_BUILD_NUM+1))
-           echo $CIRCLE_BUILD_NUM
+           CIRCLE_BUILD=$(($CIRCLE_BUILD_NUM+1))
+           echo $CIRCLE_BUILD
